@@ -1,0 +1,47 @@
+receivers:
+  otlp:
+    protocols:
+      grpc:
+        endpoint: 0.0.0.0:4317
+      http:
+        endpoint: 0.0.0.0:4318
+
+  sqlquery:
+    driver: postgres
+    datasource: "host=postgres port=5432 user=otel password=otel database=otel sslmode=disable"
+    queries:
+      - sql: "select log_type, max(datapoint) as datapoint from logs_data group by log_type"
+        metrics:
+          - metric_name: logs.datapoint
+            value_column: "datapoint"
+            attribute_columns: ["log_type"]
+
+exporters:
+  debug:
+  otlp/lgtm:
+    endpoint: lgtm:4317
+    tls:
+      insecure: true
+
+
+processors:
+  batch:
+
+service:
+  pipelines:
+    traces:
+      receivers: [ otlp ]
+      processors: [ batch ]
+      exporters: [ otlp/lgtm ]
+    metrics:
+      receivers: [ otlp ]
+      processors: [ batch ]
+      exporters: [ otlp/lgtm ]
+    metrics/sqlquery:
+      receivers: [ sqlquery ]
+      processors: [ batch ]
+      exporters: [ debug,otlp/lgtm ]
+    logs:
+      receivers: [ otlp ]
+      processors: [ batch ]
+      exporters: [ otlp/lgtm ]
