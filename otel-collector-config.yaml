@@ -1,47 +1,41 @@
 receivers:
-  otlp:
-    protocols:
-      grpc:
-        endpoint: 0.0.0.0:4317
-      http:
-        endpoint: 0.0.0.0:4318
-
   sqlquery:
     driver: postgres
-    datasource: "host=postgres port=5432 user=otel password=otel database=otel sslmode=disable"
+    datasource: "host=localhost port=5432 user=otel password=otel database=otel sslmode=disable"
     queries:
       - sql: "select log_type, max(datapoint) as datapoint from logs_data group by log_type"
         metrics:
           - metric_name: logs.datapoint
             value_column: "datapoint"
-            attribute_columns: ["log_type"]
+            attribute_columns: [ "log_type" ]
+      - sql: "select 'Max datapoint value for ' || log_type || ' is ' || max(datapoint) as datapoint, log_type from logs_data group by log_type"
+        logs:
+          - body_column: datapoint
+            attribute_columns: [ "log_type" ]
 
 exporters:
   debug:
   otlp/lgtm:
-    endpoint: lgtm:4317
+    endpoint: localhost:4317
     tls:
       insecure: true
 
 
 processors:
   batch:
+  resource:
+    attributes:
+      - key: service.name
+        value: "sql-query-reader"
+        action: insert
 
 service:
   pipelines:
-    traces:
-      receivers: [ otlp ]
-      processors: [ batch ]
-      exporters: [ otlp/lgtm ]
-    metrics:
-      receivers: [ otlp ]
-      processors: [ batch ]
-      exporters: [ otlp/lgtm ]
     metrics/sqlquery:
       receivers: [ sqlquery ]
-      processors: [ batch ]
+      processors: [ resource, batch ]
       exporters: [ debug,otlp/lgtm ]
-    logs:
-      receivers: [ otlp ]
-      processors: [ batch ]
-      exporters: [ otlp/lgtm ]
+    logs/sqlquery:
+      receivers: [ sqlquery ]
+      processors: [ resource, batch ]
+      exporters: [ debug,otlp/lgtm ]
