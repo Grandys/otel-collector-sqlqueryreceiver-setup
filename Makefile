@@ -1,7 +1,7 @@
 download_ocb_if_missing:
 	# Onlu intel macos
 	test -f ocb || curl --proto '=https' --tlsv1.2 -fL -o ocb \
-    https://github.com/open-telemetry/opentelemetry-collector-releases/releases/download/cmd%2Fbuilder%2Fv0.109.0/ocb_0.109.0_darwin_amd64 \
+    https://github.com/open-telemetry/opentelemetry-collector-releases/releases/download/cmd%2Fbuilder%2Fv0.109.0/ocb_0.109.0_linux_amd64 \
     && chmod +x ocb
 
 build: download_ocb_if_missing
