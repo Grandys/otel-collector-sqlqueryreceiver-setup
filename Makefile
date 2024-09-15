@@ -8,9 +8,16 @@ build: download_ocb_if_missing
 	./ocb --config builder-config.yaml \
 	&& cp otelcol-dev/otel-collector-custom otel-collector-custom
 
-run: build
-	docker-compose up --detach \
-	&& ./otel-collector-custom --config otel-collector-config.yaml
+start_compose:
+	docker-compose up --detach
+
+run: start_compose
+	./otel-collector-custom --config otel-collector-config.yaml
+
+run_rebuild: build run
+
+run_contrib:
+	docker-compose up --profiles otel-contrib
 
 clean:
 	docker-compose down -v && rm -f otel-collector-custom

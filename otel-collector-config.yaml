@@ -3,23 +3,20 @@ receivers:
     driver: postgres
     datasource: "host=localhost port=5432 user=otel password=otel database=otel sslmode=disable"
     queries:
-      - sql: "select log_type, max(datapoint) as datapoint from logs_data group by log_type"
-        metrics:
-          - metric_name: logs.datapoint
-            value_column: "datapoint"
-            attribute_columns: [ "log_type" ]
-      - sql: "select 'Max datapoint value for ' || log_type || ' is ' || max(datapoint) as datapoint, log_type from logs_data group by log_type"
+      - sql: "select 'Datapoint value for ' || log_type || ' is ' || datapoint as datapoint, log_type, created_at from logs_data where created_at > $$1 order by created_at"
+        tracking_column: created_at
+        tracking_start_value: '2024-09-15 00:00:00'
         logs:
           - body_column: datapoint
             attribute_columns: [ "log_type" ]
 
 exporters:
   debug:
+    verbosity: detailed
   otlp/lgtm:
     endpoint: localhost:4317
     tls:
       insecure: true
-
 
 processors:
   batch:
@@ -34,7 +31,7 @@ service:
     metrics/sqlquery:
       receivers: [ sqlquery ]
       processors: [ resource, batch ]
-      exporters: [ debug,otlp/lgtm ]
+      exporters: [ otlp/lgtm ]
     logs/sqlquery:
       receivers: [ sqlquery ]
       processors: [ resource, batch ]
