@@ -12,6 +12,20 @@ receivers:
         logs:
           - body_column: datapoint
             attribute_columns: [ "log_type" ]
+  postgresql:
+    endpoint: localhost:5432
+    transport: tcp
+    username: otel
+    password: otel
+    databases:
+      - otel
+    collection_interval: 10s
+    tls:
+      insecure: true
+    metrics: # Enable metrics disabled by default: to https://github.com/open-telemetry/opentelemetry-collector-contrib/blob/main/receiver/postgresqlreceiver/metadata.yaml
+      postgresql.sequential_scans:
+        enabled: true
+
 
 exporters:
   debug:
@@ -23,19 +37,28 @@ exporters:
 
 processors:
   batch:
-  resource:
+  resource/sqlquery:
     attributes:
       - key: service.name
         value: "sql-query-reader"
+        action: insert
+  resource/postgresql:
+    attributes:
+      - key: service.name
+        value: "postgresql"
         action: insert
 
 service:
   pipelines:
     metrics/sqlquery:
       receivers: [ sqlquery ]
-      processors: [ resource, batch ]
+      processors: [ resource/sqlquery, batch ]
       exporters: [ debug,otlp/lgtm ]
     logs/sqlquery:
       receivers: [ sqlquery ]
-      processors: [ resource, batch ]
+      processors: [ resource/sqlquery, batch ]
+      exporters: [ debug,otlp/lgtm ]
+    metrics/postgresql:
+      receivers: [ postgresql ]
+      processors: [ resource/postgresql, batch ]
       exporters: [ debug,otlp/lgtm ]
