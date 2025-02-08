@@ -12,7 +12,7 @@ Setup for otel collector with components:
 [OpenTelemetry Collector Builder (ocb)](https://opentelemetry.io/docs/collector/custom-collector/) will be downloaded as
 a part of makefile.
 
-**If your architecture is different than macOS (ARM 64), you need to
+**If your architecture is different than Linux (AMD 64), you need to
 change [download link](https://opentelemetry.io/docs/collector/custom-collector/#step-1---install-the-builder) in the
 makefile**
 
