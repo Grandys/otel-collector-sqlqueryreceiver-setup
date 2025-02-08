@@ -1,6 +1,8 @@
-# Custom otel collector with Sql Query Receiver
+# Custom otel collector
 
-Testing setup for [sql query receiver component](https://github.com/open-telemetry/opentelemetry-collector-contrib/tree/main/receiver/sqlqueryreceiver)
+Setup for otel collector with components:
+* [SQL Query Receiver](https://github.com/open-telemetry/opentelemetry-collector-contrib/tree/main/receiver/sqlqueryreceiver)
+* [PostgreSQL Receiver](https://github.com/open-telemetry/opentelemetry-collector-contrib/tree/main/receiver/postgresqlreceiver)
 
 ## Prerequisites:
 
@@ -10,7 +12,7 @@ Testing setup for [sql query receiver component](https://github.com/open-telemet
 [OpenTelemetry Collector Builder (ocb)](https://opentelemetry.io/docs/collector/custom-collector/) will be downloaded as
 a part of makefile.
 
-**If your architecture is different than MacOS/AMD, you need to
+**If your architecture is different than Linux (AMD 64), you need to
 change [download link](https://opentelemetry.io/docs/collector/custom-collector/#step-1---install-the-builder) in the
 makefile**
 
@@ -38,7 +40,7 @@ make run
 
 1. Builds custom otel collector with [provided configuration](./builder-config.yaml)
 2. Starts following containers:
-    3. postgres with sample data
-    4. LGTM stack as observability backend
+    *  postgres with sample data
+    * LGTM stack as observability backend
 5. Collector periodically (according to the [configuration](otel-collector-config.yaml)) reads data from the database
    and produces otel signals - logs and metrics 
