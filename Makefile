@@ -1,7 +1,7 @@
 download_ocb_if_missing:
 	# Onlu intel macos
 	test -f ocb || curl --proto '=https' --tlsv1.2 -fL -o ocb \
-    https://github.com/open-telemetry/opentelemetry-collector-releases/releases/download/cmd%2Fbuilder%2Fv0.119.0/ocb_0.119.0_linux_amd64 \
+    https://github.com/open-telemetry/opentelemetry-collector-releases/releases/download/cmd%2Fbuilder%2Fv0.120.0/ocb_0.120.0_linux_amd64 \
     && chmod +x ocb
 
 build: download_ocb_if_missing
@@ -11,6 +11,9 @@ build: download_ocb_if_missing
 run: build
 	docker-compose up --detach \
 	&& ./otel-collector-custom --config otel-collector-config.yaml
+
+run_ci: build
+	./otel-collector-custom --config otel-collector-config.yaml validate
 
 clean:
 	docker-compose down -v && rm -f otel-collector-custom
