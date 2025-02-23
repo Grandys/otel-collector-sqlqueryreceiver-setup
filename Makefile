@@ -12,6 +12,9 @@ run: build
 	docker-compose up --detach \
 	&& ./otel-collector-custom --config otel-collector-config.yaml
 
+run_ci: build
+	./otel-collector-custom --config otel-collector-config.yaml validate
+
 clean:
 	docker-compose down -v && rm -f otel-collector-custom
 
