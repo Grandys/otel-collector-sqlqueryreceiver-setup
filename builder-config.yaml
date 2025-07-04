@@ -5,21 +5,21 @@ dist:
 
 exporters:
   - gomod:
-      go.opentelemetry.io/collector/exporter/debugexporter v0.120.0
+      go.opentelemetry.io/collector/exporter/debugexporter v0.129.0
   - gomod:
-      go.opentelemetry.io/collector/exporter/otlpexporter v0.120.0
+      go.opentelemetry.io/collector/exporter/otlpexporter v0.129.0
 
 processors:
   - gomod:
-      go.opentelemetry.io/collector/processor/batchprocessor v0.120.0
+      go.opentelemetry.io/collector/processor/batchprocessor v0.129.0
   - gomod:
-      github.com/open-telemetry/opentelemetry-collector-contrib/processor/resourceprocessor v0.120.0
+      github.com/open-telemetry/opentelemetry-collector-contrib/processor/resourceprocessor v0.129.0
 
 receivers:
   - gomod:
-      go.opentelemetry.io/collector/receiver/otlpreceiver v0.120.0
-  - gomod: github.com/open-telemetry/opentelemetry-collector-contrib/receiver/sqlqueryreceiver v0.120.0
-  - gomod: github.com/open-telemetry/opentelemetry-collector-contrib/receiver/postgresqlreceiver v0.120.0
+      go.opentelemetry.io/collector/receiver/otlpreceiver v0.129.0
+  - gomod: github.com/open-telemetry/opentelemetry-collector-contrib/receiver/sqlqueryreceiver v0.129.0
+  - gomod: github.com/open-telemetry/opentelemetry-collector-contrib/receiver/postgresqlreceiver v0.129.0
 #  - gomod: github.com/Grandys/opentelemetry-collector-contrib/receiver/postgresqlreceiver 1742207758d6411c4678cc64dc80288966183a67
 
 # To test changes from fork, replace otel component with fork github path, for example:
@@ -30,4 +30,4 @@ receivers:
 #
 
 replaces:
-  - github.com/open-telemetry/opentelemetry-collector-contrib/internal/sqlquery => github.com/open-telemetry/opentelemetry-collector-contrib/internal/sqlquery v0.120.0
+  - github.com/open-telemetry/opentelemetry-collector-contrib/internal/sqlquery => github.com/open-telemetry/opentelemetry-collector-contrib/internal/sqlquery v0.129.0

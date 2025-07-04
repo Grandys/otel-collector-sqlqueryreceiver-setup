@@ -1,7 +1,13 @@
 receivers:
   sqlquery:
     driver: postgres
-    datasource: "host=localhost port=5432 user=otel password=otel database=otel sslmode=disable"
+    host: localhost
+    port: 5432
+    username: otel
+    password: otel
+    database: otel
+    additional_params:
+      sslmode: disable
     queries:
       - sql: "select log_type, max(datapoint) as datapoint from logs_data group by log_type"
         metrics:
