@@ -7,7 +7,7 @@ Setup for otel collector with components:
 ## Prerequisites:
 
 * docker
-* go ( tested with v1.23 or 1.24)
+* go (tested with 1.23 or 1.24)
 
 [OpenTelemetry Collector Builder (ocb)](https://opentelemetry.io/docs/collector/custom-collector/) will be downloaded as
 a part of makefile.
